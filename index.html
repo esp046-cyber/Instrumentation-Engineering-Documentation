@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Instrumentation Engineering Documentation</title>
+    <style>
+        /* ==================== CSS VARIABLES FOR THEMING ==================== */
+        :root {
+            --bg-primary: #1a1d2e;
+            --bg-secondary: #252945;
+            --bg-card: #2d3250;
+            --bg-card-hover: #353b5e;
+            --accent-primary: #4a9eff;
+            --accent-secondary: #6eb5ff;
+            --text-primary: #e8eaf6;
+            --text-secondary: #b0b8d4;
+            --text-muted: #7a82a0;
+            --border-color: #3d4466;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --margin: 1vw;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f2f5;
+            --accent-primary: #2196f3;
+            --accent-secondary: #1976d2;
+            --text-primary: #1a1d2e;
+            --text-secondary: #424242;
+            --text-muted: #757575;
+            --border-color: #e0e0e0;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* ==================== RESET & BASE STYLES ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: var(--margin);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ==================== STICKY HEADER ==================== */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ==================== THEME TOGGLE ==================== */
+        .theme-toggle {
+            background: var(--accent-primary);
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-secondary);
+            transform: scale(1.05);
+        }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .progress-container {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--success));
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        /* ==================== SEARCH BAR ==================== */
+        .search-container {
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ==================== DASHBOARD CARDS ==================== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card {
+            background: var(--bg-card);
+            padding: 20px 16px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .dashboard-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px var(--shadow);
+        }
+
+        .dashboard-card .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-card h3 {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ==================== CONTENT SECTIONS ==================== */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ==================== ACCORDION ITEMS ==================== */
+        .accordion-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .accordion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .accordion-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .review-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+
+        .accordion-icon {
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--bg-secondary);
+        }
+
+        .accordion-item.open .accordion-content {
+            max-height: 1000px;
+        }
+
+        .accordion-body {
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .detail-value {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ==================== SCROLL TO TOP BUTTON ==================== */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--accent-secondary);
+            transform: scale(1.1);
+        }
+
+        /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 14px;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-card .icon {
+                font-size: 28px;
+            }
+            
+            .dashboard-card h3 {
+                font-size: 12px;
+            }
+        }
+
+        /* ==================== UTILITY CLASSES ==================== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== STICKY HEADER ==================== -->
+    <div class="header">
+        <h1>🔧 2026 Instrumentation Engineering Documentation</h1>
+        <div class="header-controls">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">☀️</span> Theme
+            </button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label">Review Progress: <span id="progress-text">0%</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SEARCH BAR ==================== -->
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search documentation types...">
+    </div>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-card" onclick="showSection('docs')">
+            <div class="icon">📄</div>
+            <h3>Engineering Documentation</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('calcs')">
+            <div class="icon">📊</div>
+            <h3>Calculations & Design Basis</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('phases')">
+            <div class="icon">🏗</div>
+            <h3>Project Phases & Studies</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('commercial')">
+            <div class="icon">💼</div>
+            <h3>Commercial & Procurement</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('safety')">
+            <div class="icon">🔍</div>
+            <h3>Reviews, Safety & Risk</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('pid')">
+            <div class="icon">🧩</div>
+            <h3>P&ID & System Development</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('procedures')">
+            <div class="icon">📘</div>
+            <h3>Engineering Procedures</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('commissioning')">
+            <div class="icon">🔧</div>
+            <h3>Commissioning & Startup</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('coordination')">
+            <div class="icon">🤝</div>
+            <h3>Coordination & Interfaces</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('standards')">
+            <div class="icon">📋</div>
+            <h3>Standards & Compliance</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('reliability')">
+            <div class="icon">⚡</div>
+            <h3>Reliability & Risk Studies</h3>
+        </div>
+        <div class="dashboard-card" onclick="showSection('systems')">
+            <div class="icon">🌐</div>
+            <h3>Specialized Systems</h3>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENT SECTIONS ==================== -->
+    
+    <!-- Engineering Documentation Section -->
+    <div class="content-section" id="section-docs">
+        <div class="section-header">
+            <h2>📄 Engineering Documentation</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="instrumentation datasheet specifications field device transmitter valve actuator">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Instrumentation Datasheets</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Standardized forms that specify technical requirements, operating parameters, and performance criteria for individual instrumentation devices and control equipment.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides complete technical specifications for procurement, ensuring vendors supply equipment that meets project requirements. Acts as the bridge between design intent and equipment purchase.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering; refined through procurement and construction phases.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers, with input from Process, Electrical, and Operations teams.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Process data sheets, Design basis, Control philosophy, Material selection criteria, Environmental conditions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Completed datasheets for transmitters, control valves, analyzers, switches, actuators, and other field devices ready for procurement.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="instrument index tag register database tracking">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Instrument Index</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">A comprehensive register of all instrumentation equipment in a project, listing tag numbers, descriptions, locations, and key attributes in a structured database format.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Serves as the master reference for all instruments, enabling tracking, coordination, and cross-referencing across all project documentation. Essential for project organization and lifecycle management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Initiated in early design; maintained and updated throughout all project phases and into operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Lead Instrumentation Engineer or Project Controls, with updates from entire instrumentation team.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Equipment layouts, Tagging philosophy, Vendor documents, Loop diagrams.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Sortable database/spreadsheet with tag numbers, service descriptions, locations, specifications, and document references for every instrument.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="loop diagram wiring connection field cabinet marshalling">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Loop Diagrams</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Detailed single-line drawings showing the complete signal path from field instruments through junction boxes, marshalling cabinets, to control system terminations, including wiring details and terminal assignments.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides installation and troubleshooting documentation for each control loop. Shows exactly how instruments connect electrically to the control system, critical for construction and commissioning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering, finalized during construction, used extensively during commissioning and operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers/Designers, coordinated with Electrical Engineering.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Instrument Index, Control system architecture, Cable schedules, Junction box layouts, Marshalling cabinet designs.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Individual loop drawings for each control loop showing complete wiring path, terminal numbers, cable types, and connection details.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="hookup installation detail mounting piping tubing">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Hook-up Drawings</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Detailed installation drawings showing the physical mounting, process connections, impulse piping/tubing, and support arrangements for field instruments.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Guides construction personnel on exactly how to physically install instruments in the field, ensuring proper orientation, support, and process connectivity. Critical for installation quality and maintenance access.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering; used during construction and commissioning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Designers/Detailers, reviewed by Instrumentation Engineers and sometimes Piping Engineers.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Equipment layouts, Instrument datasheets, Installation standards, Vendor drawings, Piping isometrics.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Dimensioned drawings showing mounting details, tubing runs, valve manifolds, supports, and all physical installation requirements for each instrument type.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="cable schedule routing tray conduit power signal">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Cable Schedules</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive lists documenting all instrumentation cables, including cable tag numbers, types, routing paths, termination points, lengths, and installation requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Organizes cable procurement, installation planning, and maintenance documentation. Ensures proper cable selection and routing to prevent signal interference and meet safety requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering; updated during construction; maintained through operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers in coordination with Electrical Engineering and Construction teams.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Loop diagrams, Cable routing drawings, Instrument locations, Control room layouts, Hazardous area classifications, Signal types.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Detailed spreadsheets listing every cable with specifications, routing, terminations, and installation requirements; used for procurement and installation tracking.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculations & Design Basis Section -->
+    <div class="content-section" id="section-calcs">
+        <div class="section-header">
+            <h2>📊 Calculations & Design Basis</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="calculation sizing flow pressure temperature relief valve orifice">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Engineering Calculations</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Documented technical calculations for sizing, selecting, and verifying instrumentation equipment performance, including control valve sizing, orifice plate calculations, relief valve sizing, and instrument range selection.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides technical justification for equipment selection and design decisions. Ensures instruments are properly sized for process conditions and creates an auditable record of design rationale.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed during detailed engineering; may be updated during detailed design reviews or when process conditions change.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers, with peer review by senior engineers.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Process flow diagrams, Heat and material balances, Operating conditions (pressure, temperature, flow rates), Fluid properties, Design codes and standards.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Calculation packages with methodology, assumptions, results, and conclusions supporting datasheet specifications and equipment selection.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="design basis criteria philosophy standards codes requirements">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Design Basis Documentation</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive document outlining the fundamental criteria, philosophies, codes, standards, and design principles that govern all instrumentation engineering decisions for the project.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Establishes the framework and rules for all design work, ensuring consistency across the project. Serves as the reference document for all technical decisions and provides design continuity throughout project lifecycle.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed early in FEED or conceptual design; maintained and updated as a living document through detailed engineering.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Lead Instrumentation Engineer with input from all disciplines and client stakeholders.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Client requirements, Project specifications, Industry codes/standards, Regulatory requirements, Site conditions, Lessons learned from previous projects.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Document defining design philosophies, applicable codes, material selections, redundancy requirements, control strategies, safety principles, and all governing criteria.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="control philosophy strategy regulatory advanced cascade pid dcs plc">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Control Philosophy</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Detailed narrative describing the overall control strategy for the plant, including normal operation modes, startup/shutdown sequences, control schemes, alarm management, and operator interface philosophy.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Defines how the plant will be controlled and operated, serving as the foundation for control system configuration and operator training. Bridges process requirements and automation implementation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during FEED or early detailed engineering; refined through design reviews and HAZOP studies.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Control Systems Engineers and Process Engineers, with input from Operations and Safety teams.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Process flow diagrams, Process requirements, Operating procedures, Safety requirements, Operator experience, Industry best practices.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Document describing control strategies, operating modes, alarm rationalization approach, HMI design principles, and detailed control narratives for major process units.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Phases & Studies Section -->
+    <div class="content-section" id="section-phases">
+        <div class="section-header">
+            <h2>🏗 Project Phases & Studies</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="feed front end engineering design preliminary basic">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">FEED (Front-End Engineering Design) Studies</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Early-stage engineering phase that develops the project to a level sufficient for cost estimation, contracting strategy, and decision-making before committing to detailed engineering and construction.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Establishes project scope, identifies major equipment, develops preliminary designs, estimates costs with accuracy typically ±15-25%, and identifies risks before major capital commitment. Critical decision gate for project approval.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Occurs after conceptual design and before detailed engineering. Typically represents 5-10% of total engineering effort.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Multidisciplinary FEED team including Process, Instrumentation, Electrical, Mechanical, Civil, and Project Management, often led by an experienced Project Engineer.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Project requirements, Conceptual design, Process package, Site information, Client standards, Regulatory requirements, Budget constraints.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Preliminary P&IDs, Equipment lists, Plot plans, Cost estimate, Execution plan, Procurement strategy, Risk register, Instrument Index (preliminary), Control philosophy outline.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="bid package construction contractor tender epc">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Construction Bid Packages</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive document sets prepared to solicit competitive bids from contractors for construction work, including drawings, specifications, scope of work, commercial terms, and project requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides contractors with complete information needed to prepare accurate construction bids. Ensures all bidders work from identical scope and requirements, enabling fair cost comparison and contractor selection.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Prepared after detailed engineering is sufficiently complete (typically 60-90% complete) before construction contracting.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Project Management and Procurement teams, with technical input from all engineering disciplines including Instrumentation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Detailed drawings, Technical specifications, Scope of work descriptions, Schedule requirements, Quality standards, Safety requirements, Site logistics plans.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Complete bid packages including instrumentation installation drawings, specifications, quantities, construction standards, and commercial/contractual terms for distribution to contractors.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="estimate cost budget capex capital expenditure">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Cost Estimates</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Detailed financial projections for instrumentation equipment, installation, engineering services, and related costs, prepared at various levels of accuracy throughout project phases.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Supports project financial planning, investment decisions, and budget management. Estimates evolve from rough order of magnitude (±50%) through FEED (±25%) to detailed estimates (±10%) as design matures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Prepared at multiple project stages: conceptual, FEED, detailed design, and construction. Accuracy improves as design detail increases.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Cost Engineers/Estimators working with Instrumentation Engineers to validate quantities, specifications, and installation assumptions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Instrument Index, Equipment datasheets, Cable schedules, Installation drawings, Historical cost data, Vendor budgetary quotes, Labor rates, Project schedule.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Itemized cost breakdowns for instrumentation equipment, bulk materials (cable, tubing, fittings), installation labor, engineering hours, and contingencies with stated accuracy levels.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commercial & Procurement Section -->
+    <div class="content-section" id="section-commercial">
+        <div class="section-header">
+            <h2>💼 Commercial & Procurement Docs</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="rfq request quotation inquiry tender bid solicitation">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">RFQ (Request for Quotation)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal documents sent to suppliers requesting detailed pricing and technical proposals for instrumentation equipment based on project specifications and datasheets.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Initiates competitive procurement process, ensuring vendors understand requirements and submit comparable proposals. Establishes commercial and technical basis for equipment purchases.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Issued during detailed engineering once datasheets are finalized; sometimes during FEED for long-lead items or budgetary purposes.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Procurement Department with technical support from Instrumentation Engineering to prepare technical annexes and evaluate responses.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Approved datasheets, Technical specifications, Commercial terms and conditions, Quality requirements, Delivery schedules, Bidders list, Project standards.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Complete RFQ packages distributed to qualified vendors, including technical requirements, commercial terms, proposal format requirements, and evaluation criteria.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="tbe technical bid evaluation vendor comparison analysis">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">TBE (Technical Bid Evaluation)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic analysis and comparison of vendor proposals against technical requirements, evaluating compliance, performance, quality, delivery, and risk factors to support procurement decisions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides objective technical assessment of competing bids, identifying strengths, weaknesses, deviations, and risks. Supports commercial team in final vendor selection and contract negotiation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed after RFQ responses are received and before purchase order award or contract negotiation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers conduct technical evaluation; Procurement coordinates and incorporates commercial evaluation; Management makes final selection.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Vendor proposals, Original datasheets/specifications, RFQ requirements, Evaluation criteria, Technical standards, Past vendor performance data.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">TBE reports with scoring matrices, compliance analysis, deviation lists, clarification requirements, risk assessments, and technical recommendations for award.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="vendor document review submittal approval transmittal">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Vendor Document Reviews</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic review process for vendor-submitted documentation including drawings, calculations, test procedures, manuals, and certifications to ensure compliance with contract requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Verifies vendor deliverables meet technical specifications before manufacturing proceeds or equipment ships. Identifies issues early to prevent costly rework or non-conformances.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Ongoing after purchase orders are issued throughout equipment manufacturing and delivery. Critical during fabrication and before final acceptance.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation Engineers review technical documents; QA/QC reviews test and inspection documents; Project team coordinates overall document flow.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Vendor submittal packages (drawings, manuals, test plans, certificates), Purchase order requirements, Project specifications, Approved datasheets, Industry standards.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Review transmittals with approval status (Approved, Approved with Comments, Revise and Resubmit, Rejected), marked-up documents, and tracked action items for vendor response.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="contractor document review construction submittals ifc fabrication">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Contractor Document Reviews</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Review of construction contractor submissions including shop drawings, fabrication drawings, installation procedures, quality plans, and as-built documentation to ensure conformance with design intent.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures contractor's interpretation and execution plans align with engineering design and specifications. Prevents installation errors and ensures constructability before field work begins.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed during construction phase as contractor prepares and submits documents for approval before fabrication and installation activities.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Construction management team reviews with input from original design engineers (Instrumentation, Electrical, etc.) to verify technical compliance.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Contractor shop drawings, Fabrication procedures, Installation work plans, Quality control plans, As-built redlines, Construction specifications, Original design documents.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Review comments and approval status for contractor submittals, coordination of design clarifications, resolution of field issues, and acceptance of as-built documentation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews, Safety & Risk Section -->
+    <div class="content-section" id="section-safety">
+        <div class="section-header">
+            <h2>🔍 Reviews, Safety & Risk</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="hazop hazard operability study risk analysis process safety">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">HAZOP (Hazard and Operability Study)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Structured, systematic examination of process designs using guide words to identify potential hazards and operability problems, conducted by multidisciplinary teams reviewing P&IDs node by node.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Identifies safety hazards, environmental risks, and operational issues before construction. Leads to design improvements, additional safeguards (often instrumentation-based), and operating procedure development. Critical for process safety management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Typically conducted during detailed engineering (60-90% complete P&IDs). May have preliminary HAZOP during FEED and follow-up sessions for modifications.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Facilitated by trained HAZOP leader; team includes Process, Instrumentation, Operations, Safety, and sometimes Maintenance representatives. Instrumentation engineers implement protective measures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Process descriptions, Operating procedures, Design basis, Material safety data, Previous incident reports, Equipment specifications.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">HAZOP report documenting identified hazards, causes, consequences, existing safeguards, recommendations (often including additional instrumentation like interlocks, alarms, trips), and action tracking.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="sil safety integrity level sis safety instrumented system functional safety">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">SIL / SIS Documentation</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Documentation related to Safety Integrity Level (SIL) assessments and Safety Instrumented Systems (SIS) that automatically take the process to a safe state when dangerous conditions occur, in accordance with IEC 61508/61511 standards.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures critical safety systems are designed, implemented, and maintained to achieve required risk reduction. Demonstrates compliance with functional safety standards and regulatory requirements. Protects personnel, environment, and assets.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">SIL determination during FEED/HAZOP; detailed SIS design during detailed engineering; verification during commissioning; management throughout operations lifecycle.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Functional safety engineers lead assessments; instrumentation engineers design SIS systems; operations and maintenance staff manage ongoing compliance. Often requires certified functional safety personnel.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">HAZOP findings, Risk assessments, Process hazards analysis, Target risk reduction requirements, Equipment reliability data, Operating philosophy.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">SIL determination reports, Safety requirements specifications (SRS), SIS design documentation, Proof test procedures, Functional safety assessment reports, SIL verification calculations, Maintenance requirements.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- P&ID & System Development Section -->
+    <div class="content-section" id="section-pid">
+        <div class="section-header">
+            <h2>🧩 P&ID & System Development</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="pid piping instrumentation diagram pfd process flow">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">P&ID Development</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Piping and Instrumentation Diagrams (P&IDs) are detailed schematic drawings showing all process equipment, piping, instrumentation, and control systems, serving as the master reference document for plant design and operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">P&IDs are the foundational document from which all other design work flows. They define process flow, control strategies, safety systems, and equipment interconnections. Used throughout project lifecycle from design through operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Initial development during FEED; detailed development through engineering; continuous updates during construction; living documents throughout plant operation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Process engineers typically lead P&ID development with heavy input from Instrumentation engineers for all control and safety instrumentation. Reviewed by all disciplines.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Process flow diagrams (PFDs), Process design basis, Equipment specifications, Control philosophy, Safety requirements, Client standards, Vendor information.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Complete set of P&ID drawings showing all process equipment, piping, instrumentation tags, control loops, interlocks, and system boundaries. Basis for all downstream engineering deliverables.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="io list input output points signals dcs plc controller">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">I/O List Development</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive listing of all input/output signals between field instruments and control systems, defining signal types, controller assignments, and terminal allocations for DCS, PLC, and safety systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Critical for control system sizing, design, and configuration. Serves as the bridge between field instrumentation and control system hardware, ensuring proper signal interface and system capacity planning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering once P&IDs and instrument specifications are defined; updated as design evolves and through commissioning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Control systems engineers develop I/O lists, coordinating with instrumentation engineers on field device specifications and electrical engineers on marshalling design.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">P&IDs, Instrument Index, Control system architecture, Signal types from datasheets, Control philosophy, System allocation strategy, Sparing philosophy.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Detailed spreadsheets listing every I/O point with tag number, description, signal type, controller assignment, card/channel allocation, engineering units, and configuration parameters.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="cause effect matrix interlock logic safety shutdown sequence">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Cause & Effect Diagrams</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Matrix-format documents that clearly define the logical relationships between process inputs (causes) such as alarms or trips, and system outputs (effects) such as valve closures, pump stops, or alarm annunciation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides clear, unambiguous specification of interlock and shutdown logic for control system programming. Essential for safety system design, FAT testing, and operational understanding of automated responses.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed during detailed engineering after control philosophy is established; refined through HAZOP; used for control system configuration and testing.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Control systems engineers create cause & effect diagrams based on input from process engineers, HAZOP team, and safety engineers. Reviewed by operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Control philosophy, P&IDs, HAZOP recommendations, SIS requirements, Operating procedures, Process safety requirements, Alarm philosophy.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Matrix diagrams showing which initiating events (high pressure, low level, etc.) trigger which actions (close valves, stop pumps, etc.), including logic (AND/OR), time delays, and priorities.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Engineering Procedures Section -->
+    <div class="content-section" id="section-procedures">
+        <div class="section-header">
+            <h2>📘 Engineering Procedures</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="procedure standard guideline practice methodology process workflow">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Engineering Procedures</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Documented methods, standards, and step-by-step workflows that define how engineering tasks should be performed, ensuring consistency, quality, and compliance across the instrumentation engineering discipline.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Establishes standardized approaches to common engineering tasks, reducing variability, improving quality, ensuring regulatory compliance, and preserving organizational knowledge. Particularly important for training new engineers and maintaining consistency across projects.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Developed and maintained by engineering organizations; applied throughout all project phases from FEED through commissioning and sometimes operations support.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Engineering managers and senior engineers develop procedures; all instrumentation engineers follow them; QA/QC monitors compliance; procedures are periodically reviewed and updated.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Industry standards (ISA, IEC, etc.), Regulatory requirements, Company standards, Lessons learned, Best practices, Client requirements, Quality management systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Written procedures covering topics such as: datasheet preparation, calculation methodology, document review processes, P&ID development standards, tagging conventions, cable sizing, loop checking, and commissioning protocols.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commissioning & Startup Section -->
+    <div class="content-section" id="section-commissioning">
+        <div class="section-header">
+            <h2>🔧 Commissioning & Startup</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="precommissioning inspection installation verification checkout">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Pre-Commissioning Procedures</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic verification activities performed before energizing systems to ensure all installation work is complete, correct, and ready for functional testing. Includes physical inspections, continuity checks, and documentation reviews.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Confirms that construction is complete per design and that equipment can be safely energized. Prevents damage to instruments and systems by catching installation errors, wiring mistakes, and incomplete work before power-up.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Conducted after construction completion and before system energization; bridges construction and commissioning phases.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Commissioning team or construction QC inspectors perform checks; instrumentation engineers verify technical compliance; results documented by commissioning coordinator.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Installation drawings, Loop diagrams, Cable schedules, Equipment manuals, Installation specifications, As-built redlines, Punchlist items.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Pre-commissioning checklists (verified complete), Inspection reports, Non-conformance lists, Clearance certificates for energization, Updated punchlists.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="loop check testing continuity signal calibration functional">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Loop Checking Procedures</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">End-to-end testing of complete instrument loops from field device through wiring, junction boxes, marshalling, and control system to verify proper signal transmission, calibration, and functionality.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Validates that each control loop functions correctly from sensor to actuator, confirming proper wiring, configuration, signal scaling, and alarm settings. Essential quality assurance before plant operation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed during commissioning after pre-commissioning is complete and systems are energized; before functional/performance testing.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Instrumentation technicians perform tests under supervision of instrumentation engineers; results reviewed by commissioning team and operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Loop diagrams, I/O lists, Control system configuration, Calibration ranges, Instrument datasheets, P&IDs, Cause & effect matrices.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Loop check sheets (signed off), Test records showing signal values at multiple points, Calibration certificates, Deficiency reports, Loop acceptance certificates.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="functional test integrated system performance validation">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Functional Testing Protocols</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic testing of integrated systems and subsystems to verify they perform their intended functions according to design specifications, including interlock testing, alarm verification, and control strategy validation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Demonstrates that systems work together as designed, interlocks function correctly, safety systems respond appropriately, and control strategies achieve intended results before introducing process materials.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Conducted after loop checking, typically with utilities available but before process startup; may continue into early operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Commissioning team leads testing with participation from instrumentation engineers, operations, process engineers, and sometimes vendors for complex systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Control philosophy, Cause & effect diagrams, Functional descriptions, Test procedures, P&IDs, SIS functional safety requirements, Operating procedures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Functional test reports, Interlock verification records, Alarm test results, Control loop tuning parameters, Deficiency lists, System acceptance certificates.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="performance test capacity guarantee design verification">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Performance Testing</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Testing conducted under actual or simulated process conditions to verify that the plant meets design performance criteria, capacity guarantees, and operational requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Demonstrates that the facility achieves contractual performance guarantees and design specifications. Validates instrumentation accuracy under real operating conditions. Often required for project acceptance and final payment.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed after startup when the plant reaches stable operation; sometimes conducted in phases as different units come online.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Process engineers lead with support from operations, instrumentation verifies measurement systems, third-party witnesses may be required for contractual testing.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Performance guarantees, Design basis, Test protocols, Calibrated instruments, Stabilized operating conditions, Acceptance criteria, Quality assurance requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Performance test reports, Measurement data and calculations, Guarantee demonstration records, Deficiency identification, Final acceptance certificates, Lessons learned.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="turnover package operations manuals asbuilt documentation">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Turnover Packages & As-Built Documentation</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Complete documentation packages delivered to operations including as-built drawings, O&M manuals, spare parts lists, test records, warranties, and all information needed to operate and maintain the facility.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides operations team with accurate, complete documentation reflecting actual installed conditions. Essential for safe operation, maintenance planning, troubleshooting, and future modifications. Often contractual requirement.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Compiled throughout construction and commissioning; formally delivered at mechanical completion or startup; may be phased by system or area.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Document control manages compilation; engineering disciplines provide as-builts; vendors supply manuals; QA/QC verifies completeness; operations accepts delivery.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">As-built markups, Vendor manuals, Test and calibration records, Commissioning records, Spare parts recommendations, Warranties, Training records, Punchlists (closed).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Complete turnover packages including: as-built P&IDs and drawings, O&M manuals, instrument datasheets (final), loop diagrams, test records, spare parts lists, training materials, electronic documentation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="punchlist deficiency snag outstanding work completion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Punchlist Management</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic tracking and management of incomplete work items, deficiencies, and minor non-conformances identified during construction, commissioning, and startup that require correction before final project closeout.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures all work is completed to specification and no deficiencies are left unaddressed. Categorizes items by criticality (must-fix before startup vs. can be completed later) and tracks resolution to project completion.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Initiated during late construction; actively managed through commissioning and startup; closed out before final acceptance and demobilization.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">QC/QA identifies items; construction/commissioning teams correct them; project management tracks and prioritizes; engineering verifies technical resolution; client approves closure.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Inspection reports, Commissioning findings, Test failures, As-built discrepancies, Vendor documentation gaps, Installation defects, Design clarifications.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Punchlist databases with status tracking, Priority categorization (A/B/C items), Assignment and scheduling, Completion verification, Photographic evidence, Final closure certification.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coordination & Interfaces Section -->
+    <div class="content-section" id="section-coordination">
+        <div class="section-header">
+            <h2>🤝 Coordination & Interfaces</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="interdisciplinary coordination meeting interface process electrical mechanical civil">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Interdisciplinary Coordination</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Structured collaboration between engineering disciplines (Instrumentation, Process, Electrical, Mechanical, Civil, Piping) to resolve interfaces, share design information, and ensure integrated project delivery.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Prevents design conflicts, ensures compatible interfaces, facilitates information flow between disciplines, and maintains project integration. Critical for avoiding costly rework and field issues.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Continuous throughout all project phases from FEED through commissioning; intensity varies with design development stage.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Project engineering leadership facilitates; discipline leads participate; project controls tracks actions; all engineers execute agreed interfaces.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Design drawings from all disciplines, Interface matrices, Design freeze schedules, Outstanding queries, Clash detection reports, Change notices.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Meeting minutes with action items, Interface agreements (power requirements, cable routing, space allocation), Coordination drawings, Resolved technical queries, Updated schedules.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="client review approval submission stakeholder operations owner">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Client Review & Approval Cycles</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal submission of engineering deliverables to client for review, comment, and approval at defined project milestones, managing feedback incorporation and obtaining necessary approvals before proceeding.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures client requirements are met, obtains stakeholder buy-in, validates design decisions, and maintains contractual compliance. Provides formal checkpoints before committing to next phase or expenditures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Occurs at defined milestones throughout project: FEED review, 30%/60%/90% design reviews, IFC (Issued for Construction), vendor document reviews.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Document control manages submissions; discipline engineers prepare deliverables and respond to comments; project management coordinates timing; client representatives review and approve.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Deliverable registers, Review schedules, Completed documents, Internal QA/QC sign-offs, Transmittal packages, Client review procedures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Formal transmittals, Client review comments, Comment disposition reports, Revised documents incorporating feedback, Approval certificates, Tracked comment resolution.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="change management moc modification deviation engineering change notice ecn">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Change Management & Engineering Change Notices</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal process for proposing, evaluating, approving, and implementing changes to baseline design, including impact assessment on cost, schedule, other disciplines, and documentation updates.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Controls design evolution, prevents unauthorized changes, ensures impact analysis before implementation, maintains design integrity, and tracks all deviations from approved baseline. Essential for cost and schedule control.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Implemented after baseline establishment (typically post-FEED or after design freeze); continues through construction and sometimes into operations as MOC (Management of Change).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Originators identify need; engineering evaluates technical impact; project controls assesses cost/schedule; change control board approves; affected disciplines implement.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Change requests, Deviation notices, Field change requests, Vendor alternative proposals, Lessons learned, Design improvements, Error corrections.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Engineering Change Notices (ECN), Impact assessments (technical, cost, schedule), Approval documentation, Revised drawings and documents, Change logs and tracking, Implementation verification.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="rfi request information query clarification technical question field">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">RFI (Request for Information) Management</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal process for contractors, vendors, or other parties to request clarifications, interpretations, or additional information about design documents, specifications, or project requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides mechanism to resolve ambiguities, conflicts, or missing information in contract documents. Ensures work proceeds based on clear, documented direction rather than assumptions. Creates audit trail of decisions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Primarily during construction, but can occur during procurement or any phase where third parties need clarification on engineering deliverables.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Contractors/vendors submit RFIs; project management distributes to appropriate discipline; instrumentation engineers provide technical responses; project team reviews and issues formal reply.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Contract documents, Design drawings, Specifications, Installation standards, Vendor submittals, Field conditions, Contractor questions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Formal RFI responses with clarifications, Marked-up sketches or details, Interpretation of specifications, Revised drawings if needed, RFI log tracking status and closure.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="progress report status kpi schedule deliverable tracking">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Project Status Reporting & Tracking</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Regular monitoring and reporting of engineering progress, deliverable status, resource utilization, and key performance indicators to stakeholders and management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides visibility into project health, enables early identification of issues, supports resource planning and decision-making, demonstrates progress to client, and maintains project control.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Continuous throughout entire project lifecycle; reporting frequency and detail vary by phase (weekly during detailed engineering, monthly during FEED or operations support).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Project controls compiles data; discipline leads report progress; project management reviews and distributes; engineers provide input on technical status and issues.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Document status, Hour expenditure, Schedule progress, Deliverable registers, Issue logs, Milestone completion, Resource forecasts, Risk registers.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Progress reports (weekly/monthly), KPI dashboards, S-curves (planned vs actual), Deliverable status matrices, Issue/risk summaries, Forecast to complete, Schedule variance analysis.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standards & Compliance Section -->
+    <div class="content-section" id="section-standards">
+        <div class="section-header">
+            <h2>📋 Standards & Compliance</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="isa ansi iec api standards codes instrumentation automation">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Industry Standards (ISA, IEC, ANSI, API)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Internationally recognized technical standards published by organizations like ISA (International Society of Automation), IEC (International Electrotechnical Commission), ANSI (American National Standards Institute), and API (American Petroleum Institute) that govern instrumentation design, installation, and documentation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides proven methodologies, ensures interoperability, establishes safety baselines, facilitates communication through standardized symbols and terminology, and demonstrates regulatory compliance. Following standards reduces risk and improves quality.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Common Standards</div>
+                            <div class="detail-value">ISA-5.1 (P&ID symbols), ISA-5.4 (loop diagrams), ISA-84/IEC 61511 (safety systems), ISA-18.2 (alarm management), IEC 60079 (explosive atmospheres), API RP 550/551/552/553/554 (process measurement and control).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Application</div>
+                            <div class="detail-value">Referenced in project specifications, used to develop design criteria, applied in equipment selection and installation, verified during design reviews, and demonstrated in compliance documentation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Considerations</div>
+                            <div class="detail-value">Standards selection based on project location and industry sector, managing conflicts between different standards, keeping current with revisions, balancing prescriptive vs performance-based approaches, and documenting deviations with justification.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="hazardous area classification nec iec zone division explosive atmosphere">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Hazardous Area Classification</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic assessment and documentation of areas where flammable gases, vapors, or combustible dusts may be present, requiring specialized explosion-proof or intrinsically safe instrumentation per NEC (Division/Class) or IEC (Zone) classification systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures electrical and instrumentation equipment is appropriate for hazardous locations, preventing ignition sources that could cause explosions or fires. Critical safety requirement enforced by regulations and insurance.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Classification Systems</div>
+                            <div class="detail-value">NEC 500 (Class I Div 1/2 for gases, Class II for dusts, Class III for fibers) used in North America; IEC 60079 (Zone 0/1/2 for gases, Zone 20/21/22 for dusts) used internationally. Must specify gas group and temperature class.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Impact on Instrumentation</div>
+                            <div class="detail-value">Determines required equipment certifications (FM, CSA, ATEX, IECEx), affects equipment selection and cost, influences installation methods, cable gland requirements, and maintenance procedures. Drives intrinsically safe barrier/isolator requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Documentation</div>
+                            <div class="detail-value">Area classification drawings showing classified zones, Equipment lists with required certifications, Installation details for hazardous areas, Certification documentation, Inspection and maintenance requirements for Ex equipment.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="regulatory compliance environmental safety osha epa permit authority">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Regulatory Compliance & Permitting</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Meeting requirements imposed by governmental and regulatory agencies for environmental protection, workplace safety, process safety management, and emissions monitoring, requiring specific instrumentation, documentation, and reporting.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures legal compliance, protects public health and environment, maintains operating permits, avoids fines and shutdowns, and demonstrates responsible operation. Often requires certified measurement systems and data retention.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Common Requirements</div>
+                            <div class="detail-value">OSHA Process Safety Management (PSM), EPA Clean Air Act (CEMS - Continuous Emissions Monitoring), EPA Clean Water Act (effluent monitoring), BSEE/BOEM offshore regulations, DOT pipeline regulations, local fire marshal approvals.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Instrumentation Impact</div>
+                            <div class="detail-value">Mandates specific analyzer systems (emissions, water quality), requires certified instruments with performance audits, drives redundancy for critical safety systems, necessitates data historians and reporting systems, imposes calibration and maintenance schedules.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Documentation & Submissions</div>
+                            <div class="detail-value">Permit applications with monitoring plans, Pre-startup safety reviews, Compliance test reports, Ongoing performance data and reports, Incident reporting, Inspection and audit records, Authority approvals and certifications.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="nfpa fire protection fm approval safety code">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Fire Protection & Safety Codes (NFPA, FM)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Standards published by National Fire Protection Association (NFPA) and Factory Mutual (FM) governing fire detection, suppression systems, hazardous material handling, and electrical safety that impact instrumentation design and installation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Minimizes fire and explosion risks, ensures life safety, protects property, maintains insurance coverage (FM approval often required), and meets building code requirements. Critical for facility permitting and operations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Standards</div>
+                            <div class="detail-value">NFPA 70 (National Electrical Code), NFPA 72 (Fire Alarm Systems), NFPA 30 (Flammable Liquids), NFPA 15 (Water Spray Systems), NFPA 55 (Compressed Gases), FM Global Data Sheets for property protection.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Instrumentation Applications</div>
+                            <div class="detail-value">Fire and gas detection system design, Emergency shutdown system requirements, Deluge and sprinkler system controls, Flame detector placement and voting logic, Equipment spacing and protection, FM-approved equipment selection.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Compliance Activities</div>
+                            <div class="detail-value">Fire protection philosophy development, F&G mapping and detector placement studies, Integration with emergency response systems, Authority having jurisdiction (AHJ) approvals, FM insurance inspections, Testing and commissioning per standards.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reliability & Risk Studies Section -->
+    <div class="content-section" id="section-reliability">
+        <div class="section-header">
+            <h2>⚡ Reliability & Risk Studies</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="fmea failure modes effects analysis reliability criticality">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">FMEA (Failure Modes & Effects Analysis)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic analysis method that examines each component or subsystem to identify potential failure modes, their causes, effects on system operation, and criticality, enabling proactive design improvements and maintenance planning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Identifies weak points in instrumentation design before they cause problems, prioritizes maintenance efforts, supports spare parts planning, validates redundancy strategies, and improves overall system reliability. Particularly valuable for critical control systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Typically performed during detailed engineering or early operations; may be conducted during FEED for critical systems; updated based on operating experience.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Reliability engineers lead with input from instrumentation, process, operations, and maintenance teams. Results reviewed with safety and management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">System descriptions, P&IDs, Equipment specifications, Reliability data, Operating modes, Maintenance philosophy, Historical failure data, Vendor MTBF/MTTR information.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">FMEA worksheets documenting failure modes, causes, effects, detection methods, severity ratings, occurrence probability, Risk Priority Numbers (RPN), recommended actions, and tracking of improvements implemented.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="lopa layer protection analysis risk reduction sil sis">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">LOPA (Layer of Protection Analysis)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Semi-quantitative risk assessment methodology that evaluates independent protection layers (IPLs) protecting against identified hazard scenarios to determine if risk is tolerable or if additional safety instrumented functions (SIFs) are required.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Bridges qualitative HAZOP findings to quantitative SIL determination, identifies gaps in protection layers, justifies SIS design requirements, ensures adequate risk reduction, and provides defendable basis for safety decisions. More rigorous than HAZOP alone.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed after HAZOP during detailed engineering to determine SIL requirements before finalizing SIS design; may be updated if process or safeguards change.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Functional safety engineers or experienced process safety specialists lead LOPA studies; requires participation from process, instrumentation, and operations with management approval of risk tolerance criteria.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">HAZOP scenarios, Initiating event frequencies, Consequence severity, Existing protection layers (BPCS, pressure relief, alarms, procedures), Risk tolerance criteria, Probability of failure on demand (PFD) data.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">LOPA worksheets documenting scenario analysis, IPL credits, calculated risk, Required risk reduction (RRR), Determined SIL levels for each SIF, Recommendations for additional safeguards or design changes.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="qra quantitative risk assessment frequency consequence">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">QRA (Quantitative Risk Assessment)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive numerical analysis of process risks using fault trees, event trees, and consequence modeling to calculate individual and societal risk levels, often expressed as F-N curves or risk contours around facilities.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides quantified risk levels for comparison to acceptance criteria, supports land use planning and facility siting, demonstrates compliance with regulatory requirements (common in Europe, offshore), optimizes risk reduction investments, and communicates risk to stakeholders.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Typically performed during FEED or early detailed engineering for major facilities; required by regulations in some jurisdictions; updated for significant modifications.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Specialized risk analysts or consultants conduct QRA; requires extensive input from process, instrumentation, and safety teams; results reviewed with management and sometimes regulators or public.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Process inventories and conditions, Equipment failure rate data, Ignition probabilities, Meteorological data, Population distribution, Consequence models (dispersion, fire, explosion), Safeguard effectiveness (including SIS reliability).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Risk levels (individual and societal), F-N curves, Risk contour maps, Contributor identification, Sensitivity analyses, Risk reduction recommendations, Comparison to ALARP (As Low As Reasonably Practicable) criteria, Regulatory submission documentation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="reliability availability mtbf mttr redundancy sparing uptime">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Reliability Engineering & Availability Calculations</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Engineering discipline focused on predicting and improving system reliability through analysis of component failure rates (MTBF), repair times (MTTR), redundancy configurations, and preventive maintenance strategies to achieve target availability levels.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures instrumentation systems meet uptime requirements, optimizes redundancy vs cost tradeoffs, supports maintenance strategy development, validates vendor reliability claims, and predicts lifecycle costs. Critical for production facilities with high availability targets.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Concepts</div>
+                            <div class="detail-value">MTBF (Mean Time Between Failures), MTTR (Mean Time To Repair), Availability = MTBF/(MTBF+MTTR), Reliability block diagrams, Series vs parallel (redundant) configurations, Common cause failures, Voting logic (1oo2, 2oo3), Proven-in-use equipment data.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Applications in Instrumentation</div>
+                            <div class="detail-value">Analyzer system reliability analysis, Control system redundancy design (controllers, networks, power supplies), Critical loop redundancy justification, Spare parts provisioning, Preventive maintenance interval optimization, Warranty period assessment.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Deliverables</div>
+                            <div class="detail-value">Reliability block diagrams, Availability calculations with assumptions, Sensitivity analyses showing impact of component improvements, Redundancy philosophy documents, Spares recommendations with criticality ranking, Maintenance strategy recommendations.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specialized Systems Section -->
+    <div class="content-section" id="section-systems">
+        <div class="section-header">
+            <h2>🌐 Specialized Systems</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="fire gas detection fgs flame toxic combustible detector voting">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Fire & Gas Detection Systems</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Integrated safety system using flame detectors, combustible gas detectors, and toxic gas sensors with voting logic controllers to provide early warning and initiate automatic responses (alarms, ventilation, isolation, suppression) to prevent or mitigate fire and gas release incidents.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Protects personnel, environment, and assets by detecting hazardous conditions before they escalate. Enables rapid response through automated actions and operator notification. Often integrated with ESD systems for coordinated emergency response.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Components</div>
+                            <div class="detail-value">Flame detectors (UV, IR, UV/IR), Combustible gas detectors (catalytic, infrared), Toxic gas detectors (electrochemical, PID), F&G control panels with voting logic, Manual call points, Audible/visual alarms, Integration with HVAC and ESD systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Design Considerations</div>
+                            <div class="detail-value">Detector placement studies (mapping, coverage analysis), Voting philosophy (1oo2, 2oo3 to avoid spurious trips), Zone definitions and segregation, Response actions and priorities, Integration with process shutdown, Performance standards (ISA TR84.00.07, FM 6310/6320), Proof testing requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Deliverables</div>
+                            <div class="detail-value">F&G philosophy document, Detector mapping drawings, Voting logic matrices, Cause & effect diagrams for F&G actions, Alarm and action settings, Integration interface documents, Maintenance and test procedures, As-built zone drawings.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="esd emergency shutdown interlock trip safety shutdown system">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Emergency Shutdown Systems (ESD)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Dedicated safety system designed to safely shutdown part or all of a process facility in emergency situations, typically using hardwired or safety-rated logic to close isolation valves, stop equipment, depressurize systems, and secure utilities in a coordinated sequence.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides ultimate safety layer for catastrophic event prevention or mitigation. Brings process to safe state independent of normal control systems. Often required by regulations for hazardous processes. May be part of broader SIS architecture or standalone system.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">System Architecture</div>
+                            <div class="detail-value">ESD levels (ESD-1 full plant shutdown, ESD-2 unit/area shutdown, ESD-3 local equipment), Manual ESD stations and push buttons, Safety PLC/relay logic, Fail-safe shutdown valves (SDV) with solenoid pilots, Independent power supply (UPS, batteries), Depressuring/blowdown systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Design Elements</div>
+                            <div class="detail-value">Shutdown hierarchy and cascade logic, ESD valve sizing and selection, Sequential vs simultaneous shutdown, Depressuring calculations, Emergency power requirements, Integration with F&G and process safety systems, Manual override philosophy, Testing and bypass management, Restart permissives.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Documentation</div>
+                            <div class="detail-value">ESD philosophy and narrative, Shutdown logic diagrams, ESD valve lists and datasheets, Cause & effect matrices, Sequential function charts, ESD testing procedures, Bypass and override procedures, Integration with SIS documentation if applicable.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="dcs distributed control system scada hmi operator station controller redundancy">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">DCS Architecture & Configuration</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Distributed Control System - the central computerized automation platform providing regulatory control, sequential control, data acquisition, alarming, and operator interface for continuous process operations. Typically includes redundant controllers, networks, and operator stations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Serves as the plant's automation backbone, executing control strategies, presenting process status to operators, collecting and storing data, managing alarms, and coordinating process operations. Critical infrastructure requiring high reliability and cybersecurity.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">System Components</div>
+                            <div class="detail-value">Redundant controllers and I/O, Control network (typically redundant), Operator workstations and large displays, Engineering stations, Historians and data servers, Application servers, Network infrastructure (switches, firewalls), UPS power systems, Marshalling and I/O termination.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Design Activities</div>
+                            <div class="detail-value">System architecture and redundancy design, Controller allocation and loading, Network topology and bandwidth analysis, HMI screen development per ISA-101, Alarm rationalization per ISA-18.2, Control strategy configuration, Cybersecurity hardening, Factory Acceptance Testing (FAT), Integration testing.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Deliverables</div>
+                            <div class="detail-value">DCS architecture drawings, I/O allocation and loading, Network diagrams, HMI graphics and navigation, Control module configuration documentation, Alarm database, Cybersecurity architecture, FAT procedures and reports, Configuration backups and version control.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="analyzer process gas chromatograph ph conductivity moisture sample system">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Process Analyzer Systems</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Sophisticated instrumentation systems that measure chemical composition, physical properties, or contaminant levels in process streams, including gas chromatographs, liquid analyzers, emissions monitors, and supporting sample conditioning and transport systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides critical analytical data for process control, product quality assurance, regulatory compliance (emissions, effluent), safety monitoring (H2S, LEL), and process optimization. Often requires specialized engineering beyond traditional instrumentation.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Common Analyzer Types</div>
+                            <div class="detail-value">Gas chromatographs (process and purity), Continuous emissions monitors (CEMS), pH/ORP analyzers, Conductivity analyzers, Moisture analyzers, Oxygen analyzers, H2S/sulfur analyzers, TOC (Total Organic Carbon), Thermal conductivity detectors, Mass spectrometers.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Sample System Design</div>
+                            <div class="detail-value">Sample point location selection, Fast loop vs dead-end systems, Filtering and conditioning requirements, Sample transport time calculations, Pressure/temperature conditioning, Calibration gas systems, Analyzer shelter/cabinet environmental control, Maintenance access considerations.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Deliverables</div>
+                            <div class="detail-value">Analyzer selection and specifications, Sample system P&IDs, Installation and mounting drawings, Calibration procedures, Maintenance schedules, Shelter/cabinet layouts, Integration with DCS/data systems, Performance verification protocols, Regulatory compliance documentation (for CEMS).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="network industrial ethernet profinet modbus foundation fieldbus communications cybersecurity">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Industrial Networks & Communications</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Communication infrastructure connecting field devices, controllers, operator interfaces, and enterprise systems using industrial protocols (Ethernet/IP, PROFINET, Modbus TCP, Foundation Fieldbus, HART) with appropriate network architecture, bandwidth, and cybersecurity measures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Enables data exchange between automation components, supports remote diagnostics and asset management, integrates with business systems, and provides foundation for digital transformation initiatives while maintaining security and reliability.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Network Layers</div>
+                            <div class="detail-value">Field level (device networks - HART, FF, PROFIBUS), Control level (I/O and controller networks), Supervisory level (DCS/SCADA operator networks), Plant/enterprise level (MES, ERP integration), DMZ (demilitarized zone) for external access, Separate networks for safety systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Considerations</div>
+                            <div class="detail-value">Protocol selection and interoperability, Network topology (star, ring, redundant), Bandwidth and latency requirements, Managed industrial switches, Fiber optic vs copper, Wireless instrumentation (WirelessHART, ISA100), Cybersecurity (IEC 62443), Network segregation and firewalls, Remote access architecture.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Documentation</div>
+                            <div class="detail-value">Network architecture diagrams, IP addressing schemes, VLAN assignments, Protocol specifications, Device configuration standards, Cybersecurity policies and procedures, Network equipment specifications, Firewall rules and access control lists.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="content-section" id="section-reliability">
+        <div class="section-header">
+            <h2>⚡ Reliability & Risk Studies</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="fmea failure modes effects analysis reliability criticality">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">FMEA (Failure Modes & Effects Analysis)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Systematic analysis method that examines each component or subsystem to identify potential failure modes, their causes, effects on system operation, and criticality, enabling proactive design improvements and maintenance planning.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Identifies weak points in instrumentation design before they cause problems, prioritizes maintenance efforts, supports spare parts planning, validates redundancy strategies, and improves overall system reliability. Particularly valuable for critical control systems.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Typically performed during detailed engineering or early operations; may be conducted during FEED for critical systems; updated based on operating experience.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Reliability engineers lead with input from instrumentation, process, operations, and maintenance teams. Results reviewed with safety and management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">System descriptions, P&IDs, Equipment specifications, Reliability data, Operating modes, Maintenance philosophy, Historical failure data, Vendor MTBF/MTTR information.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">FMEA worksheets documenting failure modes, causes, effects, detection methods, severity ratings, occurrence probability, Risk Priority Numbers (RPN), recommended actions, and tracking of improvements implemented.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="lopa layer protection analysis risk reduction sil sis">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">LOPA (Layer of Protection Analysis)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Semi-quantitative risk assessment methodology that evaluates independent protection layers (IPLs) protecting against identified hazard scenarios to determine if risk is tolerable or if additional safety instrumented functions (SIFs) are required.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Bridges qualitative HAZOP findings to quantitative SIL determination, identifies gaps in protection layers, justifies SIS design requirements, ensures adequate risk reduction, and provides defendable basis for safety decisions. More rigorous than HAZOP alone.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Performed after HAZOP during detailed engineering to determine SIL requirements before finalizing SIS design; may be updated if process or safeguards change.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Functional safety engineers or experienced process safety specialists lead LOPA studies; requires participation from process, instrumentation, and operations with management approval of risk tolerance criteria.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">HAZOP scenarios, Initiating event frequencies, Consequence severity, Existing protection layers (BPCS, pressure relief, alarms, procedures), Risk tolerance criteria, Probability of failure on demand (PFD) data.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">LOPA worksheets documenting scenario analysis, IPL credits, calculated risk, Required risk reduction (RRR), Determined SIL levels for each SIF, Recommendations for additional safeguards or design changes.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="qra quantitative risk assessment frequency consequence">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">QRA (Quantitative Risk Assessment)</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Comprehensive numerical analysis of process risks using fault trees, event trees, and consequence modeling to calculate individual and societal risk levels, often expressed as F-N curves or risk contours around facilities.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides quantified risk levels for comparison to acceptance criteria, supports land use planning and facility siting, demonstrates compliance with regulatory requirements (common in Europe, offshore), optimizes risk reduction investments, and communicates risk to stakeholders.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Typically performed during FEED or early detailed engineering for major facilities; required by regulations in some jurisdictions; updated for significant modifications.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Specialized risk analysts or consultants conduct QRA; requires extensive input from process, instrumentation, and safety teams; results reviewed with management and sometimes regulators or public.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Process inventories and conditions, Equipment failure rate data, Ignition probabilities, Meteorological data, Population distribution, Consequence models (dispersion, fire, explosion), Safeguard effectiveness (including SIS reliability).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Risk levels (individual and societal), F-N curves, Risk contour maps, Contributor identification, Sensitivity analyses, Risk reduction recommendations, Comparison to ALARP (As Low As Reasonably Practicable) criteria, Regulatory submission documentation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="reliability availability mtbf mttr redundancy sparing uptime">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Reliability Engineering & Availability Calculations</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Engineering discipline focused on predicting and improving system reliability through analysis of component failure rates (MTBF), repair times (MTTR), redundancy configurations, and preventive maintenance strategies to achieve target availability levels.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures instrumentation systems meet uptime requirements, optimizes redundancy vs cost tradeoffs, supports maintenance strategy development, validates vendor reliability claims, and predicts lifecycle costs. Critical for production facilities with high availability targets.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Concepts</div>
+                            <div class="detail-value">MTBF (Mean Time Between Failures), MTTR (Mean Time To Repair), Availability = MTBF/(MTBF+MTTR), Reliability block diagrams, Series vs parallel (redundant) configurations, Common cause failures, Voting logic (1oo2, 2oo3), Proven-in-use equipment data.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Applications in Instrumentation</div>
+                            <div class="detail-value">Analyzer system reliability analysis, Control system redundancy design (controllers, networks, power supplies), Critical loop redundancy justification, Spare parts provisioning, Preventive maintenance interval optimization, Warranty period assessment.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Deliverables</div>
+                            <div class="detail-value">Reliability block diagrams, Availability calculations with assumptions, Sensitivity analyses showing impact of component improvements, Redundancy philosophy documents, Spares recommendations with criticality ranking, Maintenance strategy recommendations.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="content-section" id="section-coordination">
+        <div class="section-header">
+            <h2>🤝 Coordination & Interfaces</h2>
+            <button class="back-btn" onclick="backToDashboard()">← Back</button>
+        </div>
+        <div class="accordion">
+            <div class="accordion-item" data-keywords="interdisciplinary coordination meeting interface process electrical mechanical civil">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Interdisciplinary Coordination</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Structured collaboration between engineering disciplines (Instrumentation, Process, Electrical, Mechanical, Civil, Piping) to resolve interfaces, share design information, and ensure integrated project delivery.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Prevents design conflicts, ensures compatible interfaces, facilitates information flow between disciplines, and maintains project integration. Critical for avoiding costly rework and field issues.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Continuous throughout all project phases from FEED through commissioning; intensity varies with design development stage.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Project engineering leadership facilitates; discipline leads participate; project controls tracks actions; all engineers execute agreed interfaces.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Design drawings from all disciplines, Interface matrices, Design freeze schedules, Outstanding queries, Clash detection reports, Change notices.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Meeting minutes with action items, Interface agreements (power requirements, cable routing, space allocation), Coordination drawings, Resolved technical queries, Updated schedules.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="client review approval submission stakeholder operations owner">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Client Review & Approval Cycles</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal submission of engineering deliverables to client for review, comment, and approval at defined project milestones, managing feedback incorporation and obtaining necessary approvals before proceeding.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Ensures client requirements are met, obtains stakeholder buy-in, validates design decisions, and maintains contractual compliance. Provides formal checkpoints before committing to next phase or expenditures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Occurs at defined milestones throughout project: FEED review, 30%/60%/90% design reviews, IFC (Issued for Construction), vendor document reviews.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Document control manages submissions; discipline engineers prepare deliverables and respond to comments; project management coordinates timing; client representatives review and approve.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Deliverable registers, Review schedules, Completed documents, Internal QA/QC sign-offs, Transmittal packages, Client review procedures.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Formal transmittals, Client review comments, Comment disposition reports, Revised documents incorporating feedback, Approval certificates, Tracked comment resolution.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="change management moc modification deviation engineering change notice ecn">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Change Management & Engineering Change Notices</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal process for proposing, evaluating, approving, and implementing changes to baseline design, including impact assessment on cost, schedule, other disciplines, and documentation updates.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Controls design evolution, prevents unauthorized changes, ensures impact analysis before implementation, maintains design integrity, and tracks all deviations from approved baseline. Essential for cost and schedule control.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Implemented after baseline establishment (typically post-FEED or after design freeze); continues through construction and sometimes into operations as MOC (Management of Change).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Originators identify need; engineering evaluates technical impact; project controls assesses cost/schedule; change control board approves; affected disciplines implement.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Change requests, Deviation notices, Field change requests, Vendor alternative proposals, Lessons learned, Design improvements, Error corrections.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Engineering Change Notices (ECN), Impact assessments (technical, cost, schedule), Approval documentation, Revised drawings and documents, Change logs and tracking, Implementation verification.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="rfi request information query clarification technical question field">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">RFI (Request for Information) Management</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Formal process for contractors, vendors, or other parties to request clarifications, interpretations, or additional information about design documents, specifications, or project requirements.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides mechanism to resolve ambiguities, conflicts, or missing information in contract documents. Ensures work proceeds based on clear, documented direction rather than assumptions. Creates audit trail of decisions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Primarily during construction, but can occur during procurement or any phase where third parties need clarification on engineering deliverables.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Contractors/vendors submit RFIs; project management distributes to appropriate discipline; instrumentation engineers provide technical responses; project team reviews and issues formal reply.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Contract documents, Design drawings, Specifications, Installation standards, Vendor submittals, Field conditions, Contractor questions.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Formal RFI responses with clarifications, Marked-up sketches or details, Interpretation of specifications, Revised drawings if needed, RFI log tracking status and closure.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-keywords="progress report status kpi schedule deliverable tracking">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">Project Status Reporting & Tracking</span>
+                    <div class="accordion-controls">
+                        <input type="checkbox" class="review-checkbox" onclick="event.stopPropagation(); updateProgress()">
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="detail-row">
+                            <div class="detail-label">Definition</div>
+                            <div class="detail-value">Regular monitoring and reporting of engineering progress, deliverable status, resource utilization, and key performance indicators to stakeholders and management.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">Provides visibility into project health, enables early identification of issues, supports resource planning and decision-making, demonstrates progress to client, and maintains project control.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Project Phase</div>
+                            <div class="detail-value">Continuous throughout entire project lifecycle; reporting frequency and detail vary by phase (weekly during detailed engineering, monthly during FEED or operations support).</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Responsible Party</div>
+                            <div class="detail-value">Project controls compiles data; discipline leads report progress; project management reviews and distributes; engineers provide input on technical status and issues.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Inputs</div>
+                            <div class="detail-value">Document status, Hour expenditure, Schedule progress, Deliverable registers, Issue logs, Milestone completion, Resource forecasts, Risk registers.</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key Outputs</div>
+                            <div class="detail-value">Progress reports (weekly/monthly), KPI dashboards, S-curves (planned vs actual), Deliverable status matrices, Issue/risk summaries, Forecast to complete, Schedule variance analysis.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // ==================== GLOBAL STATE ====================
+        let reviewedCount = 0;
+        let totalItems = 0;
+        let currentTheme = 'dark';
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            totalItems = document.querySelectorAll('.review-checkbox').length;
+            updateProgress();
+            initScrollTopButton();
+            loadThemePreference();
+            
+            // Add search functionality
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+        });
+
+        // ==================== THEME MANAGEMENT ====================
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+                currentTheme = 'light';
+            } else {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '☀️';
+                currentTheme = 'dark';
+            }
+            
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.setAttribute('data-theme', 'light');
+                document.getElementById('theme-icon').textContent = '🌙';
+                currentTheme = 'light';
+            }
+        }
+
+        // ==================== NAVIGATION ====================
+        function showSection(sectionId) {
+            // Hide dashboard
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('searchInput').style.display = 'none';
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById('section-' + sectionId).classList.add('active');
+        }
+
+        function backToDashboard() {
+            // Show dashboard
+            document.getElementById('dashboard').style.display = 'grid';
+            document.getElementById('searchInput').style.display = 'block';
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+        }
+
+        // ==================== ACCORDION FUNCTIONALITY ====================
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const wasOpen = item.classList.contains('open');
+            
+            // Close all items in this section
+            item.closest('.accordion').querySelectorAll('.accordion-item').forEach(i => {
+                i.classList.remove('open');
+            });
+            
+            // Toggle current item
+            if (!wasOpen) {
+                item.classList.add('open');
+            }
+        }
+
+        // ==================== PROGRESS TRACKING ====================
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.review-checkbox');
+            reviewedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            
+            const percentage = totalItems > 0 ? Math.round((reviewedCount / totalItems) * 100) : 0;
+            
+            document.getElementById('progress-text').textContent = percentage + '%';
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            
+            // Save progress to localStorage
+            saveProgress();
+        }
+
+        function saveProgress() {
+            const checkboxStates = [];
+            document.querySelectorAll('.review-checkbox').forEach((cb, index) => {
+                checkboxStates[index] = cb.checked;
+            });
+            localStorage.setItem('reviewProgress', JSON.stringify(checkboxStates));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('reviewProgress');
+            if (saved) {
+                const states = JSON.parse(saved);
+                document.querySelectorAll('.review-checkbox').forEach((cb, index) => {
+                    if (states[index]) {
+                        cb.checked = true;
+                    }
+                });
+                updateProgress();
+            }
+        }
+
+        // Load progress on page load
+        window.addEventListener('load', loadProgress);
+
+        // ==================== SEARCH FUNCTIONALITY ====================
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            const allItems = document.querySelectorAll('.accordion-item');
+            
+            if (searchTerm === '') {
+                // Show all items
+                allItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter items
+            allItems.forEach(item => {
+                const title = item.querySelector('.accordion-title').textContent.toLowerCase();
+                const keywords = item.getAttribute('data-keywords') || '';
+                const content = item.querySelector('.accordion-body').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || 
+                    keywords.toLowerCase().includes(searchTerm) || 
+                    content.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    // Auto-expand matching items
+                    item.classList.add('open');
+                } else {
+                    item.style.display = 'none';
+                    item.classList.remove('open');
+                }
+            });
+        }
+
+        // ==================== SCROLL TO TOP ====================
+        function initScrollTopButton() {
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
